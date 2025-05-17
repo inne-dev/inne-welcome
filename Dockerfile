@@ -9,8 +9,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o wellcome main.go
+RUN go build -o welcome main.go
 
 EXPOSE 80
 
-CMD ["./wellcome"]
+CMD ["./welcome"]

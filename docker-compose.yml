@@ -3,7 +3,9 @@ version: "3.8"
 services:
   wellcome:
     build: .
-    container_name: wellcome
+    container_name: welcome
     ports:
-      - "8081:80"
+      - "80:80"
     restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: inne.space
