@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  wellcome:
+    build: .
+    container_name: wellcome
+    ports:
+      - "8081:80"
+    restart: unless-stopped
