@@ -4,8 +4,15 @@ services:
   wellcome:
     build: .
     container_name: welcome
-    ports:
-      - "3000:3000"
-    restart: unless-stopped
     environment:
       VIRTUAL_HOST: inne.space
+      VIRTUAL_PORT: 3000
+    expose:
+      - "3000"
+    restart: unless-stopped
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
