@@ -5,7 +5,7 @@ services:
     build: .
     container_name: welcome
     ports:
-      - "80:80"
+      - "3000:3000"
     restart: unless-stopped
     environment:
       VIRTUAL_HOST: inne.space

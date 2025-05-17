@@ -3,6 +3,7 @@ package main
 
 import (
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -44,5 +45,5 @@ func main() {
 		})
 	})
 
-	r.Run(":80")
+	r.Run(":3000")
 }
