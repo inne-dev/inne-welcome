@@ -1,16 +1,31 @@
-FROM golang:1.24-alpine
-
-RUN apk --no-cache add ca-certificates
+# Build stage
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
-RUN go mod download
+# Copy package files
+COPY package*.json ./
 
+# Install all dependencies (including dev dependencies for build)
+RUN npm install
+
+# Copy source code
 COPY . .
 
-RUN go build -o welcome main.go
+# Build the application
+RUN npm run build
 
-EXPOSE 80
+# Production stage
+FROM nginx:alpine
 
-CMD ["./welcome"]
+# Copy built assets from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
