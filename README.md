@@ -42,7 +42,12 @@ npm run preview
 
 ```bash
 # Create proxy network (if not exists)
-docker network create proxy-net
+sudo docker run -d \
+  --name nginx-proxy \
+  --network proxy-net \
+  -p 80:80 \
+  -v /var/run/docker.sock:/tmp/docker.sock:ro \
+  jwilder/nginx-proxy
 
 # Build and run
 docker-compose up --build -d

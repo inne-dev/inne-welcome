@@ -46,8 +46,8 @@ const translations: Translations = {
   },
   blog: {
     en: "Personal Blog",
-    uk: "Персональний Блог",
-    ru: "Персональный Блог",
+    uk: "Особистий Блог",
+    ru: "Личный Блог",
   },
   blogDesc: {
     en: "Sharing notes about development and infrastructure. These are short and practical texts — solutions from real tasks that can be quickly applied in practice. And so I don't forget them myself ;3",
@@ -55,19 +55,19 @@ const translations: Translations = {
     ru: "Делюсь заметками о разработке и инфраструктуре. Это короткие и практичные тексты — решения из реальных задач, которые можно быстро применить на практике. Ну и самому не забыть ;3",
   },
   pinflBot: {
-    en: "PINFL Helper Bot",
-    uk: "PINFL Helper Bot",
-    ru: "PINFL Helper Bot",
+    en: "PINFL Analyser",
+    uk: "PINFL Analyser",
+    ru: "PINFL Analyser",
   },
   pinflDesc: {
-    en: "Telegram bot for generating and validating Uzbekistan PINFL numbers. Built with Python, serverless architecture without database.",
-    uk: "Telegram бот для генерації та перевірки PINFL номерів Узбекистану. Створений на Python, serverless архітектура без бази даних.",
-    ru: "Небольшой пет-проект: бот в Telegram для генерации и проверки PINFL номеров Узбекистана, созданный для удобства разработки и тестирования.",
+    en: "A small pet project: a Telegram bot for generating and checking PINFL numbers of Uzbekistan, created for the convenience of development and testing.",
+    uk: "Невеликий пет-проект: бот в Telegram для генерації та перевірки PINFL номерів Узбекистану, створений для зручності розробки та тестування.",
+    ru: "Небольшой инструмент для генерации и проверки PINFL номеров Узбекистана, созданный для удобства разработки и тестирования.",
   },
   dialogy: {
-    en: "Dialogy App",
-    uk: "Dialogy Застосунок",
-    ru: "Dialogy Приложение",
+    en: "Dialogy",
+    uk: "Dialogy",
+    ru: "Dialogy",
   },
   dialogyDesc: {
     en: "A small application for calls. With its help you can count how much time everyone managed to talk, and it gives a simple picture of the meeting. Made to make team discussions a bit shorter and more informative.",
@@ -140,14 +140,14 @@ export default function App() {
       description: t("pinflDesc"),
       url: "https://t.me/PINFLHelperBot",
       icon: <Bot className="w-5 h-5" />,
-      tags: ["Python", "Telegram Bot", "Serverless"],
+      tags: ["Python"],
     },
     {
       title: t("dialogy"),
       description: t("dialogyDesc"),
       url: "https://dialogy.inne.space",
       icon: <MessageSquare className="w-5 h-5" />,
-      tags: ["React", "Golang", "SQLite3", "Full-stack"],
+      tags: ["React", "Golang", "SQLite3"],
     },
   ];
 
@@ -290,7 +290,6 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div>© 2025 inne.space</div>
-            <div>Backend Developer</div>
           </div>
         </div>
       </footer>
