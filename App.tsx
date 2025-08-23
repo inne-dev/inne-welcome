@@ -133,7 +133,7 @@ export default function App() {
       description: t("blogDesc"),
       url: `https://blog.inne.space/${language}/posts`,
       icon: <Globe className="w-5 h-5" />,
-      tags: ["Ruby on Rails", "SQLite3", "Backend"],
+      tags: ["Ruby on Rails", "SQLite3"],
     },
     {
       title: t("pinflBot"),
