@@ -23,7 +23,7 @@ Modern portfolio website built with React, TypeScript, and Tailwind CSS, deploye
 - **Icons**: Lucide React
 - **Build**: Vite
 - **Container**: Docker + Nginx
-- **Proxy**: nginx-proxy compatible
+- **Proxy**: Nginx Proxy Manager compatible
 
 ## 📦 Quick Start
 
@@ -45,21 +45,94 @@ npm run preview
 
 ### Docker Deployment
 
-```bash
-# Create proxy network (if not exists)
-sudo docker run -d \
-  --name nginx-proxy \
-  --network proxy-net \
-  -p 80:80 \
-  -v /var/run/docker.sock:/tmp/docker.sock:ro \
-  jwilder/nginx-proxy
+#### Prerequisites
 
-# Build and run
+1. **Create proxy network** (if not exists):
+   ```bash
+   docker network create proxy-net
+   ```
+
+2. **Install Nginx Proxy Manager** (if not installed):
+   ```bash
+   docker run -d \
+     --name nginx-proxy-manager \
+     --network proxy-net \
+     -p 80:80 \
+     -p 443:443 \
+     -p 81:81 \
+     -v npm_data:/data \
+     -v npm_letsencrypt:/etc/letsencrypt \
+     --restart unless-stopped \
+     jc21/nginx-proxy-manager:latest
+   ```
+   
+   Access Nginx Proxy Manager UI at `http://your-server-ip:81`
+   - Default credentials: `admin@example.com` / `changeme`
+
+#### Build and Run
+
+```bash
+# Build and start the container
 docker-compose up --build -d
 
 # Check status
 docker ps
 docker logs welcome
+```
+
+#### Configure Nginx Proxy Manager
+
+1. **Login to Nginx Proxy Manager** at `http://your-server-ip:81`
+
+2. **Add Proxy Host**:
+   - Go to **Hosts** → **Proxy Hosts** → **Add Proxy Host**
+   
+   **Details Tab:**
+   - **Domain Names**: `example.com` (replace with your domain)
+   - **Scheme**: `http`
+   - **Forward Hostname / IP**: `welcome` (container name)
+   - **Forward Port**: `3000`
+   - **Cache Assets**: ✓ (enabled)
+   - **Block Common Exploits**: ✓ (enabled)
+   - **Websockets Support**: ☐ (disabled)
+
+   **SSL Tab** (for Cloudflare):
+   - **SSL Certificate**: Request a new SSL Certificate
+   - **Email Address**: your-email@example.com
+   - **Use a DNS Challenge**: ✓ (enabled)
+   - **DNS Provider**: Cloudflare
+   - **Credentials File Content**:
+     ```ini
+     dns_cloudflare_api_token = your_cloudflare_api_token
+     ```
+   - **Propagation Seconds**: 30
+   - **Force SSL**: ✓ (enabled)
+   - **HTTP/2 Support**: ✓ (enabled)
+   - **HSTS Enabled**: ✓ (enabled)
+   - **HSTS Subdomains**: ✓ (enabled, if you want)
+
+   > **Getting Cloudflare API Token:**
+   > 1. Login to [Cloudflare Dashboard](https://dash.cloudflare.com/)
+   > 2. Go to **My Profile** → **API Tokens**
+   > 3. Click **Create Token** → Use **Edit zone DNS** template
+   > 4. Set **Zone Resources** to your domain
+   > 5. Copy the token
+
+3. **Cloudflare DNS Settings**:
+   - Add an **A record** pointing to your server IP
+   - Set **Proxy status** to **DNS only** (gray cloud) - important for Let's Encrypt validation
+   - After SSL certificate is issued, you can enable proxy (orange cloud) if needed
+
+4. **Save** and your site will be available at your domain with HTTPS
+
+#### Updating the Application
+
+```bash
+# Pull latest changes
+git pull
+
+# Rebuild and restart
+docker-compose up --build -d
 ```
 
 ## 🐳 Docker Configuration
@@ -68,14 +141,9 @@ The application uses a multi-stage Dockerfile:
 1. **Build stage**: Node.js Alpine for building the React app
 2. **Production stage**: Nginx Alpine for serving static files
 
-### Environment Variables
-
-- `VIRTUAL_HOST`: Domain name for nginx-proxy
-- `VIRTUAL_PORT`: Internal port (3000)
-
 ### Network
 
-The container connects to `proxy-net` external network for reverse proxy integration.
+The container connects to `proxy-net` external network for reverse proxy integration with Nginx Proxy Manager.
 
 ## 📁 Project Structure
 
@@ -131,22 +199,21 @@ See the **Projects Configuration** section below for how to manage projects.
 
 ## 🚀 Deployment
 
-The application is configured for deployment with nginx-proxy:
+The application is configured for deployment with Nginx Proxy Manager:
 
 ```yaml
 services:
-  wellcome:
+  welcome:
     build: .
     container_name: welcome
-    environment:
-      VIRTUAL_HOST: inne.space
-      VIRTUAL_PORT: 3000
     expose:
       - "3000"
     restart: unless-stopped
     networks:
       - proxy-net
 ```
+
+See the **Docker Deployment** section above for complete setup instructions.
 
 ### Health Check
 

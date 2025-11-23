@@ -1,12 +1,9 @@
 version: "3.8"
 
 services:
-  wellcome:
+  welcome:
     build: .
     container_name: welcome
-    environment:
-      VIRTUAL_HOST: inne.space
-      VIRTUAL_PORT: 3000
     expose:
       - "3000"
     restart: unless-stopped
