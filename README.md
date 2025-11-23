@@ -47,33 +47,27 @@ npm run preview
 
 #### Prerequisites
 
-1. **Create proxy network** (if not exists):
-   ```bash
-   docker network create proxy-net
-   ```
+Install **Nginx Proxy Manager** (if not installed):
+```bash
+docker run -d \
+  --name nginx-proxy-manager \
+  -p 80:80 \
+  -p 443:443 \
+  -p 81:81 \
+  -v npm_data:/data \
+  -v npm_letsencrypt:/etc/letsencrypt \
+  --restart unless-stopped \
+  jc21/nginx-proxy-manager:latest
+```
 
-2. **Install Nginx Proxy Manager** (if not installed):
-   ```bash
-   docker run -d \
-     --name nginx-proxy-manager \
-     --network proxy-net \
-     -p 80:80 \
-     -p 443:443 \
-     -p 81:81 \
-     -v npm_data:/data \
-     -v npm_letsencrypt:/etc/letsencrypt \
-     --restart unless-stopped \
-     jc21/nginx-proxy-manager:latest
-   ```
-   
-   Access Nginx Proxy Manager UI at `http://your-server-ip:81`
-   - Default credentials: `admin@example.com` / `changeme`
+Access Nginx Proxy Manager UI at `http://your-server-ip:81`
+- Default credentials: `admin@example.com` / `changeme`
 
 #### Build and Run
 
 ```bash
 # Build and start the container
-docker-compose up --build -d
+docker compose up --build -d
 
 # Check status
 docker ps
@@ -90,7 +84,7 @@ docker logs welcome
    **Details Tab:**
    - **Domain Names**: `example.com` (replace with your domain)
    - **Scheme**: `http`
-   - **Forward Hostname / IP**: `welcome` (container name)
+   - **Forward Hostname / IP**: `your-server-ip` (server IP address, e.g., `192.168.1.100`)
    - **Forward Port**: `3000`
    - **Cache Assets**: ✓ (enabled)
    - **Block Common Exploits**: ✓ (enabled)
@@ -141,9 +135,7 @@ The application uses a multi-stage Dockerfile:
 1. **Build stage**: Node.js Alpine for building the React app
 2. **Production stage**: Nginx Alpine for serving static files
 
-### Network
-
-The container connects to `proxy-net` external network for reverse proxy integration with Nginx Proxy Manager.
+The container exposes port `3000` and can work with any reverse proxy without requiring shared Docker networks.
 
 ## 📁 Project Structure
 
@@ -206,12 +198,12 @@ services:
   welcome:
     build: .
     container_name: welcome
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     restart: unless-stopped
-    networks:
-      - proxy-net
 ```
+
+The container exposes port 3000 on the host, allowing Nginx Proxy Manager to forward traffic to `server-ip:3000`.
 
 See the **Docker Deployment** section above for complete setup instructions.
 
@@ -306,9 +298,10 @@ Update `App.tsx` to modify:
    npm install
    ```
 
-3. **Network not found**: Create the proxy network
+3. **Network not found**: This is no longer an issue - the container uses port mapping instead of shared networks
    ```bash
-   docker network create proxy-net
+   # Container is accessible at server-ip:3000
+   curl http://localhost:3000
    ```
 
 ## 📄 License
