@@ -1,0 +1,60 @@
+projects:
+  - id: blog
+    title:
+      en: "Personal Blog"
+      uk: "Особистий Блог"
+      ru: "Личный Блог"
+    description:
+      en: "Sharing notes about development and infrastructure. These are short and practical texts — solutions from real tasks that can be quickly applied in practice. And so I don't forget them myself ;3"
+      uk: "Ділюся нотатками про розробку та інфраструктуру. Це короткі та практичні тексти — рішення з реальних задач, які можна швидко застосувати на практиці. Ну і самому не забути ;3"
+      ru: "Делюсь заметками о разработке и инфраструктуре. Это короткие и практичные тексты — решения из реальных задач, которые можно быстро применить на практике. Ну и самому не забыть ;3"
+    url: "https://blog.inne.space/{language}/posts"
+    icon: "Globe"
+    tags:
+      - "Ruby on Rails"
+      - "SQLite3"
+    disabled: true
+    disabledReason:
+      en: "The project is temporarily unavailable. My server crashed (literally, it burned down), and I, of course, didn't make backups. The server is back up now, but I haven't had time to fully restore the projects yet."
+      uk: "Проект тимчасово недоступний, у мене зламався сервер (буквально він згорів) і я, звичайно ж, не зробив бекапи. Тепер сервер є, але повністю зупинити проект я поки що не встиг."
+      ru: "Проект временно недоступен, у меня сломался сервер (буквально, он сгорел) и я, конечно же, не сделал бекапы. Теперь сервер есть, но проекты полностью востановить я пока не успел."
+
+  - id: pinfl
+    title:
+      en: "PINFL Analyser"
+      uk: "PINFL Analyser"
+      ru: "PINFL Analyser"
+    description:
+      en: "A small pet project: a Telegram bot for generating and checking PINFL numbers of Uzbekistan, created for the convenience of development and testing."
+      uk: "Невеликий пет-проект: бот в Telegram для генерації та перевірки PINFL номерів Узбекистану, створений для зручності розробки та тестування."
+      ru: "Небольшой инструмент для генерации и проверки PINFL номеров Узбекистана, созданный для удобства разработки и тестирования."
+    url: "https://t.me/PINFLHelperBot"
+    icon: "Bot"
+    tags:
+      - "Python"
+    disabled: false
+    disabledReason:
+      en: ""
+      uk: ""
+      ru: ""
+
+  - id: dialogy
+    title:
+      en: "Dialogy"
+      uk: "Dialogy"
+      ru: "Dialogy"
+    description:
+      en: "A small application for calls. With its help you can count how much time everyone managed to talk, and it gives a simple picture of the meeting. Made to make team discussions a bit shorter and more informative."
+      uk: "Маленький застосунок для дзвінків. За його допомогою ви можете порахувати, скільки часу кожен встиг поговорити, і він дає просту картинку зустрічі. Зроблено, щоб командні обговорення були трохи коротшими та інформативнішими."
+      ru: "Маленькое приложение для созвонов. С его помощью вы можете посчитать, сколько времени каждый успел поговорить, и даёт простую картинку встречи. Сделано, чтобы командные обсуждения были чуть более короткими и информативными."
+    url: "https://dialogy.inne.space"
+    icon: "MessageSquare"
+    tags:
+      - "React"
+      - "Golang"
+      - "SQLite3"
+    disabled: true
+    disabledReason:
+      en: "The project is not available, it is in the early stages of development."
+      uk: "Проект не доступний, він перебуває в розробці на початковому етапі."
+      ru: "Проект не доступен, он находится в разработке на начальном этапе."

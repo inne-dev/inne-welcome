@@ -1,5 +1,10 @@
 # Inne Welcome - Portfolio Website
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-4.4-646CFF.svg)](https://vitejs.dev/)
+
 Modern portfolio website built with React, TypeScript, and Tailwind CSS, deployed with Docker.
 
 ## 🚀 Features
@@ -84,6 +89,7 @@ inne-welcome/
 ├── styles/             # Global styles
 │   └── globals.css     # Tailwind CSS
 ├── App.tsx             # Main application component
+├── projects.yaml       # Projects configuration
 ├── Dockerfile          # Docker build instructions
 ├── docker-compose.yml  # Docker Compose configuration
 ├── nginx.conf          # Nginx configuration
@@ -98,9 +104,12 @@ inne-welcome/
 - Russian (ru)
 
 ### Projects Showcase
+Projects are configured in `projects.yaml`:
 - Personal Blog (Ruby on Rails)
 - PINFL Helper Bot (Python Telegram Bot)
 - Dialogy App (React + Golang)
+
+See the **Projects Configuration** section below for how to manage projects.
 
 ### Contact Links
 - GitHub: [@inne-dev](https://github.com/inne-dev)
@@ -154,12 +163,59 @@ Edit `styles/globals.css` to customize the color scheme:
 - Light theme: `:root` variables
 - Dark theme: `.dark` class variables
 
+### Projects Configuration
+Projects are managed via `projects.yaml` configuration file:
+
+#### Updating Projects:
+1. Edit `projects.yaml` with your changes
+2. Rebuild and redeploy:
+   ```bash
+   # For Docker deployment
+   docker-compose up --build -d
+   
+   # For local development
+   npm run build
+   ```
+
+#### Project Structure in YAML:
+```yaml
+projects:
+  - id: unique-project-id
+    title:
+      en: "Project Title"
+      uk: "Назва Проекту"
+      ru: "Название Проекта"
+    description:
+      en: "Project description"
+      uk: "Опис проекту"
+      ru: "Описание проекта"
+    url: "https://project.url"
+    icon: "Globe"  # Available: Globe, Bot, MessageSquare
+    tags:
+      - "React"
+      - "TypeScript"
+    disabled: false
+    disabledReason:
+      en: "Reason why disabled"
+      uk: "Причина відключення"
+      ru: "Причина отключения"
+```
+
+#### Disabling a Project:
+Set `disabled: true` and provide a reason:
+```yaml
+disabled: true
+disabledReason:
+  en: "Project temporarily unavailable"
+  uk: "Проєкт тимчасово недоступний"
+  ru: "Проект временно недоступен"
+```
+
 ### Content
 Update `App.tsx` to modify:
 - Personal information
-- Project descriptions
 - Contact links
-- Translations
+- General translations (non-project related)
 
 ## 📝 Scripts
 
@@ -190,7 +246,11 @@ Update `App.tsx` to modify:
 
 ## 📄 License
 
-This project is private. All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/inne-dev/inne-welcome/issues).
 
 ## 👨‍💻 Author
 

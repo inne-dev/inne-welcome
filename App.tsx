@@ -7,11 +7,12 @@ import {
   Moon,
   Github,
   Send,
-  ExternalLink,
+  ArrowRight,
   Globe,
   Bot,
   MessageSquare,
 } from "lucide-react";
+import yaml from "js-yaml";
 
 type Language = "en" | "uk" | "ru";
 
@@ -21,6 +22,33 @@ interface Translations {
     uk: string;
     ru: string;
   };
+}
+
+interface ProjectConfig {
+  id: string;
+  title: {
+    en: string;
+    uk: string;
+    ru: string;
+  };
+  description: {
+    en: string;
+    uk: string;
+    ru: string;
+  };
+  url: string;
+  icon: string;
+  tags: string[];
+  disabled: boolean;
+  disabledReason: {
+    en: string;
+    uk: string;
+    ru: string;
+  };
+}
+
+interface ProjectsYamlData {
+  projects: ProjectConfig[];
 }
 
 const translations: Translations = {
@@ -44,46 +72,12 @@ const translations: Translations = {
     uk: "Контакти",
     ru: "Контакты",
   },
-  blog: {
-    en: "Personal Blog",
-    uk: "Особистий Блог",
-    ru: "Личный Блог",
-  },
-  blogDesc: {
-    en: "Sharing notes about development and infrastructure. These are short and practical texts — solutions from real tasks that can be quickly applied in practice. And so I don't forget them myself ;3",
-    uk: "Ділюся нотатками про розробку та інфраструктуру. Це короткі та практичні тексти — рішення з реальних задач, які можна швидко застосувати на практиці. Ну і самому не забути ;3",
-    ru: "Делюсь заметками о разработке и инфраструктуре. Это короткие и практичные тексты — решения из реальных задач, которые можно быстро применить на практике. Ну и самому не забыть ;3",
-  },
-  pinflBot: {
-    en: "PINFL Analyser",
-    uk: "PINFL Analyser",
-    ru: "PINFL Analyser",
-  },
-  pinflDesc: {
-    en: "A small pet project: a Telegram bot for generating and checking PINFL numbers of Uzbekistan, created for the convenience of development and testing.",
-    uk: "Невеликий пет-проект: бот в Telegram для генерації та перевірки PINFL номерів Узбекистану, створений для зручності розробки та тестування.",
-    ru: "Небольшой инструмент для генерации и проверки PINFL номеров Узбекистана, созданный для удобства разработки и тестирования.",
-  },
-  dialogy: {
-    en: "Dialogy",
-    uk: "Dialogy",
-    ru: "Dialogy",
-  },
-  dialogyDesc: {
-    en: "A small application for calls. With its help you can count how much time everyone managed to talk, and it gives a simple picture of the meeting. Made to make team discussions a bit shorter and more informative.",
-    uk: "Маленький застосунок для дзвінків. За його допомогою ви можете порахувати, скільки часу кожен встиг поговорити, і він дає просту картинку зустрічі. Зроблено, щоб командні обговорення були трохи коротшими та інформативнішими.",
-    ru: "Маленькое приложение для созвонов. С его помощью вы можете посчитать, сколько времени каждый успел поговорить, и даёт простую картинку встречи. Сделано, чтобы командные обсуждения были чуть более короткими и информативными.",
-  },
-  viewProject: {
-    en: "View Project",
-    uk: "Переглянути Проєкт",
-    ru: "Посмотреть Проект",
-  },
-  openBot: {
-    en: "Open Bot",
-    uk: "Відкрити Бот",
-    ru: "Открыть Бот",
-  },
+};
+
+const iconMap: { [key: string]: JSX.Element } = {
+  Globe: <Globe className="w-5 h-5" />,
+  Bot: <Bot className="w-5 h-5" />,
+  MessageSquare: <MessageSquare className="w-5 h-5" />,
 };
 
 export default function App() {
@@ -112,6 +106,18 @@ export default function App() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
+  const [projectsConfig, setProjectsConfig] = useState<ProjectsYamlData | null>(null);
+
+  useEffect(() => {
+    fetch("/projects.yaml")
+      .then((response) => response.text())
+      .then((text) => {
+        const data = yaml.load(text) as ProjectsYamlData;
+        setProjectsConfig(data);
+      })
+      .catch((error) => console.error("Error loading projects:", error));
+  }, []);
+
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add("dark");
@@ -127,29 +133,12 @@ export default function App() {
 
   const t = (key: string) => translations[key]?.[language] || key;
 
-  const projects = [
-    {
-      title: t("blog"),
-      description: t("blogDesc"),
-      url: `https://blog.inne.space/${language}/posts`,
-      icon: <Globe className="w-5 h-5" />,
-      tags: ["Ruby on Rails", "SQLite3"],
-    },
-    {
-      title: t("pinflBot"),
-      description: t("pinflDesc"),
-      url: "https://t.me/PINFLHelperBot",
-      icon: <Bot className="w-5 h-5" />,
-      tags: ["Python"],
-    },
-    {
-      title: t("dialogy"),
-      description: t("dialogyDesc"),
-      url: "https://dialogy.inne.space",
-      icon: <MessageSquare className="w-5 h-5" />,
-      tags: ["React", "Golang", "SQLite3"],
-    },
-  ];
+  const projects = projectsConfig
+    ? projectsConfig.projects.map((project) => ({
+        ...project,
+        url: project.url.replace("{language}", language),
+      }))
+    : [];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -223,11 +212,11 @@ export default function App() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3 flex-1">
                     <div className="w-10 h-10 bg-secondary rounded-md flex items-center justify-center flex-shrink-0">
-                      {project.icon}
+                      {iconMap[project.icon]}
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="mb-1 h-7 flex items-center">
-                        {project.title}
+                        {project.title[language]}
                       </h3>
                       <div className="flex gap-1 flex-wrap min-h-[24px] items-start">
                         {project.tags.map((tag) => (
@@ -245,14 +234,22 @@ export default function App() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.open(project.url, "_blank")}
+                    onClick={() => window.location.href = project.url}
+                    disabled={project.disabled}
                     className="flex-shrink-0"
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
+                {project.disabled && project.disabledReason[language] && (
+                  <div className="mb-3 p-3 border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-950/30 rounded">
+                    <p className="text-sm text-orange-800 dark:text-orange-200">
+                      {project.disabledReason[language]}
+                    </p>
+                  </div>
+                )}
                 <p className="text-muted-foreground leading-relaxed min-h-[60px]">
-                  {project.description}
+                  {project.description[language]}
                 </p>
               </Card>
             ))}
