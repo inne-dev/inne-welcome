@@ -74,50 +74,44 @@ docker ps
 docker logs welcome
 ```
 
-#### Configure Nginx Proxy Manager
+#### Configure for Public Access
 
-1. **Login to Nginx Proxy Manager** at `http://your-server-ip:81`
+**⚠️ Important:** If your site works locally but Cloudflare shows host errors, you likely need **Cloudflare Tunnel** (Option 2).
 
-2. **Add Proxy Host**:
-   - Go to **Hosts** → **Proxy Hosts** → **Add Proxy Host**
-   
-   **Details Tab:**
-   - **Domain Names**: `example.com` (replace with your domain)
-   - **Scheme**: `http`
-   - **Forward Hostname / IP**: `your-server-ip` (server IP address, e.g., `192.168.1.100`)
-   - **Forward Port**: `3000`
-   - **Cache Assets**: ✓ (enabled)
-   - **Block Common Exploits**: ✓ (enabled)
-   - **Websockets Support**: ☐ (disabled)
+##### Direct Access with Port Forwarding
 
-   **SSL Tab** (for Cloudflare):
+**Use this if you have a VPS/dedicated server with public IP.**
+
+1. **Router Setup** (skip if you have public IP):
+   - Forward ports **80** and **443** to your server's local IP
+   - Router settings → Port Forwarding/Virtual Server
+
+2. **Nginx Proxy Manager Setup:**
+   - Login at `http://your-server-ip:81`
+   - Add **Proxy Host**:
+     - **Domain Names**: `example.com`
+     - **Scheme**: `http`
+     - **Forward Hostname / IP**: `192.168.1.100` (your server's local IP)
+     - **Forward Port**: `3000`
+     - **Cache Assets**: ✓
+     - **Block Common Exploits**: ✓
+
+3. **SSL with DNS Challenge:**
    - **SSL Certificate**: Request a new SSL Certificate
-   - **Email Address**: your-email@example.com
-   - **Use a DNS Challenge**: ✓ (enabled)
+   - **Email**: your-email@example.com
+   - **Use a DNS Challenge**: ✓
    - **DNS Provider**: Cloudflare
-   - **Credentials File Content**:
+   - **Credentials**:
      ```ini
      dns_cloudflare_api_token = your_cloudflare_api_token
      ```
-   - **Propagation Seconds**: 30
-   - **Force SSL**: ✓ (enabled)
-   - **HTTP/2 Support**: ✓ (enabled)
-   - **HSTS Enabled**: ✓ (enabled)
-   - **HSTS Subdomains**: ✓ (enabled, if you want)
+   
+   > Get API Token: Cloudflare → My Profile → API Tokens → Create Token → Edit zone DNS
 
-   > **Getting Cloudflare API Token:**
-   > 1. Login to [Cloudflare Dashboard](https://dash.cloudflare.com/)
-   > 2. Go to **My Profile** → **API Tokens**
-   > 3. Click **Create Token** → Use **Edit zone DNS** template
-   > 4. Set **Zone Resources** to your domain
-   > 5. Copy the token
-
-3. **Cloudflare DNS Settings**:
-   - Add an **A record** pointing to your server IP
-   - Set **Proxy status** to **DNS only** (gray cloud) - important for Let's Encrypt validation
-   - After SSL certificate is issued, you can enable proxy (orange cloud) if needed
-
-4. **Save** and your site will be available at your domain with HTTPS
+4. **Cloudflare DNS:**
+   - Add **A record** → your public IP
+   - **Proxy status**: DNS only (gray cloud) during certificate creation
+   - After SSL works, enable proxy (orange cloud)
 
 #### Updating the Application
 

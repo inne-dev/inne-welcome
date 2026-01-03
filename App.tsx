@@ -106,7 +106,9 @@ export default function App() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
-  const [projectsConfig, setProjectsConfig] = useState<ProjectsYamlData | null>(null);
+  const [projectsConfig, setProjectsConfig] = useState<ProjectsYamlData | null>(
+    null,
+  );
 
   useEffect(() => {
     fetch("/projects.yaml")
@@ -234,7 +236,7 @@ export default function App() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.location.href = project.url}
+                    onClick={() => (window.location.href = project.url)}
                     disabled={project.disabled}
                     className="flex-shrink-0"
                   >
@@ -286,7 +288,7 @@ export default function App() {
       <footer className="border-t border-border/40 mt-16">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div>© 2025 inne.space</div>
+            <div>© 2026 inne.space</div>
           </div>
         </div>
       </footer>
