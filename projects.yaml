@@ -31,21 +31,3 @@ projects:
     disabledReason:
       en: ""
       ru: ""
-
-  - id: dialogy
-    title:
-      en: "Dialogy"
-      ru: "Dialogy"
-    description:
-      en: "A small application for calls. With its help you can count how much time everyone managed to talk, and it gives a simple picture of the meeting. Made to make team discussions a bit shorter and more informative."
-      ru: "Маленькое приложение для созвонов. С его помощью вы можете посчитать, сколько времени каждый успел поговорить, и даёт простую картинку встречи. Сделано, чтобы командные обсуждения были чуть более короткими и информативными."
-    url: "https://dialogy.inne.space"
-    icon: "MessageSquare"
-    tags:
-      - "React"
-      - "Golang"
-      - "SQLite3"
-    disabled: true
-    disabledReason:
-      en: "The project is not available, it is in the early stages of development."
-      ru: "Проект не доступен, он находится в разработке на начальном этапе."
