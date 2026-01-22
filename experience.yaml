@@ -1,0 +1,95 @@
+experience:
+  - id: codex-optimus
+    company:
+      en: "Codex Optimus"
+      ru: "Codex Optimus"
+    position:
+      en: "Ruby Programmer"
+      ru: "Ruby программист"
+    description:
+      en: |
+        - Developed and fully maintained two microservices end-to-end:
+          an automatic credit limit calculation service (Python) and a caching/adaptation service for paid government APIs (Ruby on Rails).
+        - Reduced credit processing time from ≥1 day to ~15 minutes, handling 100+ clients/day at peak and eliminating manual calculations.
+        - Designed caching for 14 government API endpoints, reducing external API costs by ~80% and improving resilience to unstable responses.
+        - Optimized performance (~3× faster), reduced incidents to <1 per month.
+        - Set up CI/CD pipelines (Docker, ArgoCD) used across microservices and the main project for ~1.5 years.
+        - Wrote RSpec tests (>90% coverage), maintained production systems, and handled releases.
+        - Maintained detailed technical documentation.
+      ru: |
+        - Разработал и полностью сопровождал два микросервиса:
+          сервис автоматического расчёта кредитного лимита (Python) и сервис кеширования и адаптации платных гос-API (Ruby on Rails).
+        - Сократил время расчёта с ≥1 дня до ~15 минут, обеспечил обработку 100+ клиентов в день в пике и полностью исключил ручной подсчёт.
+        - Реализовал кеширование 14 эндпоинтов гос-API, снизив расходы на внешние сервисы примерно на 80% и повысив устойчивость к нестабильным ответам.
+        - Оптимизировал производительность (~в 3 раза), сократил количество инцидентов до <1 в месяц.
+        - Настроил CI/CD (Docker, ArgoCD), используемый микросервисами и основным проектом ~1,5 года.
+        - Писал тесты на RSpec (покрытие >90%), участвовал в продакшн-поддержке и релизах.
+        - Вёл подробную техническую документацию.
+    startDate: "2023-10-01"
+    endDate: "2026-01-01"
+    tags:
+      - "Ruby on Rails"
+      - "Python"
+      - "Docker"
+      - "ArgoCD"
+      - "RSpec"
+      - "CI/CD"
+      - "Redis"
+      - "Sentry"
+
+  - id: fortis
+    company:
+      en: "Fortis Технологии"
+      ru: "Фортис Технологии"
+    position:
+      en: "Ruby Programmer"
+      ru: "Ruby программист"
+    description:
+      en: |
+        - Worked with a monolithic Ruby on Rails application, focusing on refactoring and redesign of legacy code.
+        - Updated the Ruby version and optimized critical parts, accelerating routine operations by more than 2×.
+        - Updated 4 UI screens and improved code structure and readability.
+        - Increased RSpec test coverage from ~5% to ~20%.
+        - Documented internal logic to speed up onboarding of new developers.
+      ru: |
+        - Работал с монолитным Ruby on Rails приложением, занимался рефакторингом и редизайном легаси-кода.
+        - Обновил версию Ruby и оптимизировал ключевые участки, ускорив рутинные операции более чем в 2 раза.
+        - Обновил 4 экрана и улучшил структуру и читаемость кода.
+        - Повысил покрытие тестами RSpec с ~5% до ~20%.
+        - Задокументировал внутреннюю логику, ускорив онбординг новых разработчиков.
+    startDate: "2023-05-01"
+    endDate: "2023-07-31"
+    tags:
+      - "Ruby on Rails"
+      - "RSpec"
+      - "Ruby"
+      - "Refactoring"
+
+  - id: jetruby
+    company:
+      en: "JetRuby Agency"
+      ru: "JetRuby Agency"
+    position:
+      en: "Ruby + React Programmer"
+      ru: "Ruby + React программист"
+    description:
+      en: |
+        - Participated in task definition and decomposition with the team lead and product, analyzing requirements and proposing implementation options.
+        - Fixed bugs and enhanced backend functionality on Ruby on Rails, including integrations with third-party APIs and handling unstable responses.
+        - Took part in release preparation and deployments via Rancher and helped analyze production incidents.
+        - Implemented parts of frontend logic on React, including forms, API interaction, and state management.
+        - Collaborated closely with backend, frontend, and product teams.
+      ru: |
+        - Участвовал в постановке и декомпозиции задач с тимлидом и продуктом, анализировал требования и предлагал варианты реализации.
+        - Исправлял баги и дорабатывал backend на Ruby on Rails, включая интеграции со сторонними API и обработку нестабильных ответов.
+        - Участвовал в подготовке и выкладке релизов через Rancher и разборе инцидентов.
+        - Реализовывал отдельные части frontend-логики на React: формы, работу с API и состояниями.
+        - Плотно взаимодействовал с backend, frontend-командой и продуктом.
+    startDate: "2021-08-01"
+    endDate: "2023-05-31"
+    tags:
+      - "Ruby on Rails"
+      - "React"
+      - "Rancher"
+      - "API Integration"
+      - "Frontend"

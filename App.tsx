@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import {
   Sun,
   Moon,
@@ -11,6 +12,7 @@ import {
   Globe,
   Bot,
   MessageSquare,
+  Linkedin,
 } from "lucide-react";
 import yaml from "js-yaml";
 
@@ -51,6 +53,32 @@ interface ProjectsYamlData {
   projects: ProjectConfig[];
 }
 
+interface ExperienceConfig {
+  id: string;
+  company: {
+    en: string;
+    uk: string;
+    ru: string;
+  };
+  position: {
+    en: string;
+    uk: string;
+    ru: string;
+  };
+  description: {
+    en: string;
+    uk: string;
+    ru: string;
+  };
+  startDate: string;
+  endDate: string | null;
+  tags: string[];
+}
+
+interface ExperienceYamlData {
+  experience: ExperienceConfig[];
+}
+
 const translations: Translations = {
   name: {
     en: "Backend Developer",
@@ -66,6 +94,21 @@ const translations: Translations = {
     en: "Projects",
     uk: "Проєкти",
     ru: "Проекты",
+  },
+  experience: {
+    en: "Experience",
+    uk: "Досвід",
+    ru: "Опыт",
+  },
+  totalExperience: {
+    en: "Total experience",
+    uk: "Загальний досвід",
+    ru: "Общий опыт",
+  },
+  currentlyWorking: {
+    en: "Currently working",
+    uk: "Працюю зараз",
+    ru: "Работаю до сих пор",
   },
   contacts: {
     en: "Contacts",
@@ -110,6 +153,9 @@ export default function App() {
     null,
   );
 
+  const [experienceConfig, setExperienceConfig] =
+    useState<ExperienceYamlData | null>(null);
+
   useEffect(() => {
     fetch("/projects.yaml")
       .then((response) => response.text())
@@ -118,6 +164,14 @@ export default function App() {
         setProjectsConfig(data);
       })
       .catch((error) => console.error("Error loading projects:", error));
+
+    fetch("/experience.yaml")
+      .then((response) => response.text())
+      .then((text) => {
+        const data = yaml.load(text) as ExperienceYamlData;
+        setExperienceConfig(data);
+      })
+      .catch((error) => console.error("Error loading experience:", error));
   }, []);
 
   useEffect(() => {
@@ -135,12 +189,84 @@ export default function App() {
 
   const t = (key: string) => translations[key]?.[language] || key;
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.toLocaleDateString(
+      language === "ru" ? "ru-RU" : language === "uk" ? "uk-UA" : "en-US",
+      { month: "long" },
+    );
+    const year = date.getFullYear();
+    return `${month} ${year}`;
+  };
+
+  const calculateTotalExperience = (experiences: ExperienceConfig[]) => {
+    let totalMonths = 0;
+
+    experiences.forEach((exp) => {
+      const startDate = new Date(exp.startDate);
+      const endDate = exp.endDate ? new Date(exp.endDate) : new Date();
+
+      const months =
+        (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+        (endDate.getMonth() - startDate.getMonth());
+      totalMonths += months + 1; // Include both start and end month
+    });
+
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    if (language === "ru" || language === "uk") {
+      const yearsText =
+        language === "ru"
+          ? years === 1
+            ? "год"
+            : years > 1 && years < 5
+              ? "года"
+              : "лет"
+          : years === 1
+            ? "рік"
+            : years > 1 && years < 5
+              ? "роки"
+              : "років";
+      const monthsText =
+        language === "ru"
+          ? months === 1
+            ? "месяц"
+            : months > 1 && months < 5
+              ? "месяца"
+              : "месяцев"
+          : months === 1
+            ? "місяць"
+            : months > 1 && months < 5
+              ? "місяці"
+              : "місяців";
+
+      if (years > 0 && months > 0) {
+        return `${years} ${yearsText} ${months} ${monthsText}`;
+      } else if (years > 0) {
+        return `${years} ${yearsText}`;
+      } else {
+        return `${months} ${monthsText}`;
+      }
+    } else {
+      if (years > 0 && months > 0) {
+        return `${years} year${years > 1 ? "s" : ""} ${months} month${months > 1 ? "s" : ""}`;
+      } else if (years > 0) {
+        return `${years} year${years > 1 ? "s" : ""}`;
+      } else {
+        return `${months} month${months > 1 ? "s" : ""}`;
+      }
+    }
+  };
+
   const projects = projectsConfig
     ? projectsConfig.projects.map((project) => ({
         ...project,
         url: project.url.replace("{language}", language),
       }))
     : [];
+
+  const experience = experienceConfig ? experienceConfig.experience : [];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -199,29 +325,99 @@ export default function App() {
             <p className="text-muted-foreground w-full max-w-2xl leading-relaxed min-h-[120px] flex items-start">
               {t("intro")}
             </p>
+            {experience.length > 0 && (
+              <div className="text-muted-foreground mt-4">
+                <span className="font-medium">{t("totalExperience")}:</span>{" "}
+                {calculateTotalExperience(experience)}
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Projects Section */}
+        {/* Projects & Experience Tabs */}
         <section className="mb-16">
-          <h2 className="mb-8 h-10 flex items-center">{t("projects")}</h2>
-          <div className="grid gap-6">
-            {projects.map((project, index) => (
-              <Card
-                key={index}
-                className="p-6 hover:shadow-md transition-shadow min-h-[180px]"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3 flex-1">
-                    <div className="w-10 h-10 bg-secondary rounded-md flex items-center justify-center flex-shrink-0">
-                      {iconMap[project.icon]}
+          <Tabs defaultValue="projects" className="w-full">
+            <TabsList className="mb-8">
+              <TabsTrigger value="projects">{t("projects")}</TabsTrigger>
+              <TabsTrigger value="experience">{t("experience")}</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="projects" className="space-y-0">
+              <div className="grid gap-6">
+                {projects.map((project, index) => (
+                  <Card
+                    key={index}
+                    className="p-6 hover:shadow-md transition-shadow min-h-[180px]"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="w-10 h-10 bg-secondary rounded-md flex items-center justify-center flex-shrink-0">
+                          {iconMap[project.icon]}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="mb-1 h-7 flex items-center">
+                            {project.title[language]}
+                          </h3>
+                          <div className="flex gap-1 flex-wrap min-h-[24px] items-start">
+                            {project.tags.map((tag) => (
+                              <Badge
+                                key={tag}
+                                variant="secondary"
+                                className="text-xs"
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => (window.location.href = project.url)}
+                        disabled={project.disabled}
+                        className="flex-shrink-0"
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </Button>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="mb-1 h-7 flex items-center">
-                        {project.title[language]}
+                    {project.disabled && project.disabledReason[language] && (
+                      <div className="mb-3 p-3 border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-950/30 rounded">
+                        <p className="text-sm text-orange-800 dark:text-orange-200">
+                          {project.disabledReason[language]}
+                        </p>
+                      </div>
+                    )}
+                    <p className="text-muted-foreground leading-relaxed min-h-[60px]">
+                      {project.description[language]}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="experience" className="space-y-0">
+              <div className="grid gap-6">
+                {experience.map((exp, index) => (
+                  <Card
+                    key={index}
+                    className="p-6 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex-1">
+                      <h3 className="mb-1 font-semibold text-lg">
+                        {exp.position[language]}
                       </h3>
-                      <div className="flex gap-1 flex-wrap min-h-[24px] items-start">
-                        {project.tags.map((tag) => (
+                      <div className="text-muted-foreground mb-2">
+                        {exp.company[language]}
+                      </div>
+                      <div className="text-sm text-muted-foreground mb-3">
+                        {formatDate(exp.startDate)} -{" "}
+                        {exp.endDate
+                          ? formatDate(exp.endDate)
+                          : t("currentlyWorking")}
+                      </div>
+                      <div className="flex gap-1 flex-wrap min-h-[24px] items-start mb-3">
+                        {exp.tags.map((tag) => (
                           <Badge
                             key={tag}
                             variant="secondary"
@@ -232,30 +428,22 @@ export default function App() {
                         ))}
                       </div>
                     </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => (window.location.href = project.url)}
-                    disabled={project.disabled}
-                    className="flex-shrink-0"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-                {project.disabled && project.disabledReason[language] && (
-                  <div className="mb-3 p-3 border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-950/30 rounded">
-                    <p className="text-sm text-orange-800 dark:text-orange-200">
-                      {project.disabledReason[language]}
-                    </p>
-                  </div>
-                )}
-                <p className="text-muted-foreground leading-relaxed min-h-[60px]">
-                  {project.description[language]}
-                </p>
-              </Card>
-            ))}
-          </div>
+                    <div className="text-muted-foreground leading-relaxed space-y-2">
+                      {exp.description[language]
+                        .split("\n")
+                        .filter((line) => line.trim())
+                        .map((line, idx) => (
+                          <div key={idx} className="flex items-start gap-2">
+                            <span className="text-primary mt-1">•</span>
+                            <span>{line.replace(/^- /, "").trim()}</span>
+                          </div>
+                        ))}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </section>
 
         {/* Contacts Section */}
@@ -279,6 +467,19 @@ export default function App() {
             >
               <Send className="w-4 h-4" />
               Telegram
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                window.open(
+                  "https://www.linkedin.com/in/andy-litvinov-635925289/",
+                  "_blank",
+                )
+              }
+              className="flex items-center gap-2 w-[120px] justify-center"
+            >
+              <Linkedin className="w-4 h-4" />
+              LinkedIn
             </Button>
           </div>
         </section>
