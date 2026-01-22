@@ -8,8 +8,7 @@ experience:
       ru: "Ruby программист"
     description:
       en: |
-        - Developed and fully maintained two microservices end-to-end:
-          an automatic credit limit calculation service (Python) and a caching/adaptation service for paid government APIs (Ruby on Rails).
+        - Developed and fully maintained two microservices end-to-end: an automatic credit limit calculation service (Python) and a caching/adaptation service for paid government APIs (Ruby on Rails).
         - Reduced credit processing time from ≥1 day to ~15 minutes, handling 100+ clients/day at peak and eliminating manual calculations.
         - Designed caching for 14 government API endpoints, reducing external API costs by ~80% and improving resilience to unstable responses.
         - Optimized performance (~3× faster), reduced incidents to <1 per month.
@@ -17,8 +16,7 @@ experience:
         - Wrote RSpec tests (>90% coverage), maintained production systems, and handled releases.
         - Maintained detailed technical documentation.
       ru: |
-        - Разработал и полностью сопровождал два микросервиса:
-          сервис автоматического расчёта кредитного лимита (Python) и сервис кеширования и адаптации платных гос-API (Ruby on Rails).
+        - Разработал и полностью сопровождал два микросервиса: сервис автоматического расчёта кредитного лимита (Python) и сервис кеширования и адаптации платных гос-API (Ruby on Rails).
         - Сократил время расчёта с ≥1 дня до ~15 минут, обеспечил обработку 100+ клиентов в день в пике и полностью исключил ручной подсчёт.
         - Реализовал кеширование 14 эндпоинтов гос-API, снизив расходы на внешние сервисы примерно на 80% и повысив устойчивость к нестабильным ответам.
         - Оптимизировал производительность (~в 3 раза), сократил количество инцидентов до <1 в месяц.
