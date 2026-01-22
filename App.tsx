@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "./components/ui/button";
-import { Card } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
+import { Card } from "./components/ui/card";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import {
   Sun,
@@ -13,6 +14,8 @@ import {
   Bot,
   MessageSquare,
   Linkedin,
+  CheckCircle,
+  FileText,
 } from "lucide-react";
 import yaml from "js-yaml";
 
@@ -114,6 +117,11 @@ const translations: Translations = {
     en: "Contacts",
     uk: "Контакти",
     ru: "Контакты",
+  },
+  jobSearchStatus: {
+    en: "Looking for new opportunities — reach me via the Contacts section",
+    uk: "Шукаю нові можливості — зв'язатися можна через розділ «Контакти»",
+    ru: "Ищу новые возможности — связаться можно через раздел контактов",
   },
 };
 
@@ -325,13 +333,19 @@ export default function App() {
             <p className="text-muted-foreground w-full max-w-2xl leading-relaxed min-h-[120px] flex items-start">
               {t("intro")}
             </p>
-            {experience.length > 0 && (
+            {experience && experience.length > 0 && (
               <div className="text-muted-foreground mt-4">
                 <span className="font-medium">{t("totalExperience")}:</span>{" "}
                 {calculateTotalExperience(experience)}
               </div>
             )}
           </div>
+          {experience && experience.length > 0 && (
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0" />
+              <span className="text-sm">{t("jobSearchStatus")}</span>
+            </div>
+          )}
         </section>
 
         {/* Projects & Experience Tabs */}
@@ -480,6 +494,19 @@ export default function App() {
             >
               <Linkedin className="w-4 h-4" />
               LinkedIn
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                window.open(
+                  "https://hh.ru/resume/2e015778ff0be97e8b0039ed1f784254304a57",
+                  "_blank",
+                )
+              }
+              className="flex items-center gap-2 w-[120px] justify-center"
+            >
+              <FileText className="w-4 h-4" />
+              HH.ru
             </Button>
           </div>
         </section>
