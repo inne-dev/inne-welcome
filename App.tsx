@@ -463,7 +463,7 @@ export default function App() {
         {/* Contacts Section */}
         <section>
           <h2 className="mb-8 h-10 flex items-center">{t("contacts")}</h2>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             <Button
               variant="outline"
               onClick={() =>
