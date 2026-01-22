@@ -159,7 +159,7 @@ export default function App() {
           <div className="flex items-center gap-4">
             {/* Language Switcher */}
             <div className="flex gap-1">
-              {(["en", "uk", "ru"] as Language[]).map((lang) => (
+              {(["en", "ru"] as Language[]).map((lang) => (
                 <Button
                   key={lang}
                   variant={language === lang ? "default" : "ghost"}
